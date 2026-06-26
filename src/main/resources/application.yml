@@ -1,0 +1,19 @@
+server:
+  port: 8072
+
+spring:
+  application:
+    name: lost-pets-similarity-search
+  datasource:
+    url: jdbc:postgresql://localhost:5434/${DB_NAME:paymentsdb}
+    username: ${DB_USERNAME:username}
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
