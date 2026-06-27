@@ -25,7 +25,7 @@ class UserRepositoryTest {
     @Container
     @ServiceConnection
     @SuppressWarnings("unused")
-    static PostgreSQLContainer postgres = new PostgreSQLContainer("postgres:17-alpine");
+    private static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17-alpine");
 
     @Autowired
     private UserRepository userRepository;
