@@ -1,6 +1,15 @@
 package com.anton.tsarenko.payment.core.api;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.mockStatic;
+
 import org.junit.jupiter.api.Test;
+import org.mockito.MockedStatic;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * Tests for {@link AppLauncher}.
@@ -8,10 +17,35 @@ import org.junit.jupiter.api.Test;
 class AppLauncherTest {
 
     @Test
-    void testMain() {
+    void shouldHaveSpringBootApplicationAnnotation() {
         // Given
+        Class<AppLauncher> appLauncherClass = AppLauncher.class;
+
         // When
-        AppLauncher.main(new String[0]);
+        SpringBootApplication springBootApplication = appLauncherClass.getAnnotation(SpringBootApplication.class);
+        ConfigurationPropertiesScan configurationPropertiesScan =
+                appLauncherClass.getAnnotation(ConfigurationPropertiesScan.class);
+
         // Then
+        assertThat(springBootApplication).isNotNull();
+        assertThat(configurationPropertiesScan).isNotNull();
+    }
+
+    @Test
+    void shouldRunSpringApplication() {
+        // Given
+        String[] args = {"--server.port=0"};
+
+        try (MockedStatic<SpringApplication> springApplication = mockStatic(SpringApplication.class)) {
+            ConfigurableApplicationContext applicationContext = mock(ConfigurableApplicationContext.class);
+            springApplication.when(() -> SpringApplication.run(AppLauncher.class, args))
+                    .thenReturn(applicationContext);
+
+            // When
+            AppLauncher.main(args);
+
+            // Then
+            springApplication.verify(() -> SpringApplication.run(AppLauncher.class, args));
+        }
     }
 }

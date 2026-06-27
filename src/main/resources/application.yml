@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: lost-pets-similarity-search
+    name: payment-core-api
   datasource:
     url: jdbc:postgresql://localhost:5434/${DB_NAME:paymentsdb}
     username: ${DB_USERNAME:username}
