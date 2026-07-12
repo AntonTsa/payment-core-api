@@ -1,10 +1,18 @@
 package com.anton.tsarenko.payment.core.api.users.controller;
 
+import com.anton.tsarenko.payment.core.api.users.dto.RestContractExceptionResponse;
 import com.anton.tsarenko.payment.core.api.users.dto.UserRequest;
 import com.anton.tsarenko.payment.core.api.users.dto.UserResponse;
 import com.anton.tsarenko.payment.core.api.users.entity.User;
 import com.anton.tsarenko.payment.core.api.users.mapper.UserMapper;
 import com.anton.tsarenko.payment.core.api.users.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
@@ -27,7 +35,8 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/users")
+@Tag(name = "Users")
+@RequestMapping("/api/v1/users")
 public class UserController {
     private final UserService userService;
     private final UserMapper mapper;
@@ -40,6 +49,16 @@ public class UserController {
      * @return {@link ResponseEntity} with URI of created user
      */
     @PostMapping
+    @Operation(summary = "Create user", description = "Creates a new user with a unique email address.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "201", description = "User created"),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid user request",
+                    content = @Content(schema = @Schema(implementation = RestContractExceptionResponse.class))
+            ),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
     public ResponseEntity<URI> create(
             @Valid @RequestBody UserRequest userRequest,
             HttpServletRequest httpServletRequest
@@ -61,7 +80,24 @@ public class UserController {
      * @return {@link ResponseEntity} with the user data
      */
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getNote(@PathVariable @Positive long id) {
+    @Operation(summary = "Get user", description = "Returns a user by identifier.")
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "User found",
+                    content = @Content(schema = @Schema(implementation = UserResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid user identifier",
+                    content = @Content(schema = @Schema(implementation = RestContractExceptionResponse.class))
+            ),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<UserResponse> get(
+            @Parameter(description = "Positive user identifier.", example = "1")
+            @PathVariable @Positive long id
+    ) {
         return ResponseEntity.ok(mapper.toUserResponse(userService.findById(id)));
     }
 
@@ -73,7 +109,18 @@ public class UserController {
      * @return {@link ResponseEntity} with no content
      */
     @PutMapping("/{id}")
-    public ResponseEntity<Void> updateNote(
+    @Operation(summary = "Replace user", description = "Replaces mutable user fields by identifier.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "User replaced"),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid user request",
+                    content = @Content(schema = @Schema(implementation = RestContractExceptionResponse.class))
+            ),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<Void> update(
+            @Parameter(description = "Positive user identifier.", example = "1")
             @PathVariable @Positive long id,
             @Valid @RequestBody UserRequest userRequest
     ) {
@@ -88,7 +135,25 @@ public class UserController {
      * @return {@link ResponseEntity} with no content
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteNote(@PathVariable @Positive Long id) {
+    @Operation(summary = "Delete user", description = "Deletes a user by identifier.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "204", description = "User deleted"),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Invalid user identifier",
+                    content = @Content(schema = @Schema(implementation = RestContractExceptionResponse.class))
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "User not found",
+                    content = @Content(schema = @Schema(implementation = RestContractExceptionResponse.class))
+            ),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<Void> delete(
+            @Parameter(description = "Positive user identifier.", example = "1")
+            @PathVariable @Positive Long id
+    ) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
     }

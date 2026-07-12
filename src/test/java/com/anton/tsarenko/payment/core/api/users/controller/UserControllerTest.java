@@ -117,7 +117,7 @@ class UserControllerTest {
         when(mapper.toUserResponse(user)).thenReturn(userResponse);
 
         // When
-        ResponseEntity<UserResponse> response = userController.getNote(USER_ID);
+        ResponseEntity<UserResponse> response = userController.get(USER_ID);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -140,7 +140,7 @@ class UserControllerTest {
         doNothing().when(userService).replaceUser(USER_ID, user);
 
         // When
-        ResponseEntity<Void> response = userController.updateNote(USER_ID, userRequest);
+        ResponseEntity<Void> response = userController.update(USER_ID, userRequest);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
@@ -160,7 +160,7 @@ class UserControllerTest {
         doNothing().when(userService).deleteUser(USER_ID);
 
         // When
-        ResponseEntity<Void> response = userController.deleteNote(USER_ID);
+        ResponseEntity<Void> response = userController.delete(USER_ID);
 
         // Then
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NO_CONTENT);
@@ -210,7 +210,7 @@ class UserControllerTest {
         when(mapper.toUserResponse(user)).thenReturn(UserResponse.builder().id(providedId).build());
 
         // When
-        userController.getNote(providedId);
+        userController.get(providedId);
 
         // Then
         verify(userService).findById(providedId);
@@ -231,7 +231,7 @@ class UserControllerTest {
         doNothing().when(userService).replaceUser(USER_ID, updatedUser);
 
         // When
-        userController.updateNote(USER_ID, updateRequest);
+        userController.update(USER_ID, updateRequest);
 
         // Then
         verify(mapper).toUser(updateRequest);
@@ -251,7 +251,7 @@ class UserControllerTest {
         when(userService.findById(USER_ID)).thenThrow(exception);
 
         // When & Then
-        assertThatThrownBy(() -> userController.getNote(USER_ID))
+        assertThatThrownBy(() -> userController.get(USER_ID))
                 .isInstanceOf(EmptyResultDataAccessException.class)
                 .isEqualTo(exception);
         verify(userService).findById(USER_ID);
@@ -270,7 +270,7 @@ class UserControllerTest {
         doThrow(exception).when(userService).deleteUser(USER_ID);
 
         // When & Then
-        assertThatThrownBy(() -> userController.deleteNote(USER_ID))
+        assertThatThrownBy(() -> userController.delete(USER_ID))
                 .isInstanceOf(EmptyResultDataAccessException.class)
                 .isEqualTo(exception);
         verify(userService).deleteUser(USER_ID);
@@ -292,7 +292,7 @@ class UserControllerTest {
         doThrow(exception).when(userService).replaceUser(USER_ID, user);
 
         // When & Then
-        assertThatThrownBy(() -> userController.updateNote(USER_ID, updateRequest))
+        assertThatThrownBy(() -> userController.update(USER_ID, updateRequest))
                 .isInstanceOf(EmptyResultDataAccessException.class)
                 .isEqualTo(exception);
         verify(userService).replaceUser(USER_ID, user);
@@ -310,7 +310,7 @@ class UserControllerTest {
         when(userService.findById(USER_ID)).thenThrow(exception);
 
         // When & Then
-        assertThatThrownBy(() -> userController.getNote(USER_ID))
+        assertThatThrownBy(() -> userController.get(USER_ID))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("Database connection failed");
         verify(userService).findById(USER_ID);
@@ -353,7 +353,7 @@ class UserControllerTest {
         doThrow(exception).when(userService).replaceUser(USER_ID, user);
 
         // When & Then
-        assertThatThrownBy(() -> userController.updateNote(USER_ID, updateRequest))
+        assertThatThrownBy(() -> userController.update(USER_ID, updateRequest))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Invalid email format");
         verify(userService).replaceUser(USER_ID, user);
@@ -371,7 +371,7 @@ class UserControllerTest {
         when(userService.findById(USER_ID)).thenThrow(exception);
 
         // When & Then
-        assertThatThrownBy(() -> userController.getNote(USER_ID))
+        assertThatThrownBy(() -> userController.get(USER_ID))
                 .isInstanceOf(NullPointerException.class)
                 .hasMessage("User entity is null");
         verify(userService).findById(USER_ID);
@@ -413,7 +413,7 @@ class UserControllerTest {
         when(mapper.toUserResponse(user)).thenThrow(exception);
 
         // When & Then
-        assertThatThrownBy(() -> userController.getNote(USER_ID))
+        assertThatThrownBy(() -> userController.get(USER_ID))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("Cannot map to response");
         verify(userService).findById(USER_ID);
@@ -432,7 +432,7 @@ class UserControllerTest {
         doThrow(exception).when(userService).deleteUser(USER_ID);
 
         // When & Then
-        assertThatThrownBy(() -> userController.deleteNote(USER_ID))
+        assertThatThrownBy(() -> userController.delete(USER_ID))
                 .isInstanceOf(UnsupportedOperationException.class)
                 .hasMessage("Bulk delete not supported");
         verify(userService).deleteUser(USER_ID);

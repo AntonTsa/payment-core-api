@@ -1,5 +1,6 @@
 package com.anton.tsarenko.payment.core.api.users.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import java.io.Serializable;
 import lombok.Builder;
@@ -12,4 +13,9 @@ import lombok.extern.jackson.Jacksonized;
  */
 @Builder
 @Jacksonized
-public record UserRequest(@Email String email) implements Serializable {}
+@Schema(description = "Request body for creating or replacing a user.")
+public record UserRequest(
+        @Email
+        @Schema(description = "User email address.", example = "user@example.com")
+        String email
+) implements Serializable {}

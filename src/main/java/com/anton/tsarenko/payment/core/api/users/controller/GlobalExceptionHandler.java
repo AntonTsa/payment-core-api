@@ -26,7 +26,10 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
  */
 @Slf4j
 @RequiredArgsConstructor
-@ControllerAdvice(basePackages = {"com.anton.tsarenko.payment.core.api.users.controller"})
+@ControllerAdvice(basePackages = {
+        "com.anton.tsarenko.payment.core.api.users.controller",
+        "com.anton.tsarenko.payment.core.api.accounts.controller"
+})
 public class GlobalExceptionHandler {
 
     private static final String REASON_DELIMITER = ": ";
