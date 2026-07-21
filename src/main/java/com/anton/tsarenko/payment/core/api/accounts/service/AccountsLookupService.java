@@ -1,7 +1,6 @@
 package com.anton.tsarenko.payment.core.api.accounts.service;
 
 import com.anton.tsarenko.payment.core.api.accounts.entity.Account;
-
 import java.util.List;
 
 /**

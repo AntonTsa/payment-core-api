@@ -1,4 +1,4 @@
-CREATE TABLE accounts (
+CREATE TABLE accounts.accounts (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT NOT NULL,
     currency VARCHAR(3) NOT NULL DEFAULT 'EUR',

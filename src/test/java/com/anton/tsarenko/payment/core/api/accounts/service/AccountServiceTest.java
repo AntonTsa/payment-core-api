@@ -11,7 +11,6 @@ import com.anton.tsarenko.payment.core.api.accounts.entity.AccountCurrency;
 import com.anton.tsarenko.payment.core.api.accounts.entity.AccountStatus;
 import com.anton.tsarenko.payment.core.api.accounts.repository.AccountRepository;
 import com.anton.tsarenko.payment.core.api.accounts.service.impl.AccountServiceImpl;
-import com.anton.tsarenko.payment.core.api.users.service.UserLookupService;
 import java.time.Instant;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,14 +27,12 @@ class AccountServiceTest {
     private static final Instant CREATED_AT = Instant.parse("2026-06-27T10:00:00Z");
 
     private AccountRepository accountRepository;
-    private UserLookupService userLookupService;
     private AccountServiceImpl accountService;
 
     @BeforeEach
     void setUp() {
         accountRepository = Mockito.mock(AccountRepository.class);
-        userLookupService = Mockito.mock(UserLookupService.class);
-        accountService = new AccountServiceImpl(accountRepository, userLookupService);
+        accountService = new AccountServiceImpl(accountRepository);
     }
 
     @Test
@@ -58,33 +55,12 @@ class AccountServiceTest {
                 .status(AccountStatus.ACTIVE)
                 .createdAt(CREATED_AT)
                 .build();
-        when(userLookupService.existedById(1L)).thenReturn(true);
         when(accountRepository.save(account)).thenReturn(savedAccount);
 
         Long accountId = accountService.createAccount(account);
 
         assertThat(accountId).isEqualTo(ACCOUNT_ID);
         verify(accountRepository).save(account);
-    }
-
-    @Test
-    @DisplayName("""
-            GIVEN a new account with non-existing user id
-            WHEN creating account
-            THEN throws {@link RuntimeException}
-            """)
-    void shouldThrowExceptionWhenCreatingAccount() {
-        Account account = Account.builder()
-                .userId(1L)
-                .currency(AccountCurrency.EUR)
-                .status(AccountStatus.ACTIVE)
-                .createdAt(CREATED_AT)
-                .build();
-        when(userLookupService.existedById(1L)).thenReturn(false);
-
-        assertThatThrownBy(() -> accountService.createAccount(account))
-                .isInstanceOf(RuntimeException.class)
-                .hasMessage("User with provided id does not exist.");
     }
 
     @Test
@@ -102,7 +78,6 @@ class AccountServiceTest {
                 .createdAt(CREATED_AT)
                 .build();
 
-        when(userLookupService.existedById(1L)).thenReturn(true);
         when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(account));
 
         Account foundAccount = accountService.findById(ACCOUNT_ID);
@@ -124,36 +99,6 @@ class AccountServiceTest {
                 .isInstanceOf(RuntimeException.class)
                 .hasMessage("Account not found");
         verify(accountRepository).findById(ACCOUNT_ID);
-    }
-
-    @Test
-    @DisplayName("""
-            GIVEN existing account and replacement account
-            WHEN replacing account
-            THEN existing account mutable fields are updated and saved
-            """)
-    void shouldUpdateExistingAccountWhenReplacingAccount() {
-        Account existingAccount = Account.builder()
-                .id(ACCOUNT_ID)
-                .userId(1L)
-                .currency(AccountCurrency.EUR)
-                .status(AccountStatus.ACTIVE)
-                .createdAt(CREATED_AT)
-                .build();
-        Account replacementAccount = Account.builder()
-                .userId(2L)
-                .currency(AccountCurrency.USD)
-                .status(AccountStatus.BLOCKED)
-                .build();
-        when(accountRepository.findById(ACCOUNT_ID)).thenReturn(Optional.of(existingAccount));
-
-        accountService.replaceAccount(ACCOUNT_ID, replacementAccount);
-
-        assertThat(existingAccount.getUserId()).isEqualTo(2L);
-        assertThat(existingAccount.getCurrency().name()).isEqualTo("USD");
-        assertThat(existingAccount.getStatus()).isEqualTo(AccountStatus.BLOCKED);
-        verify(accountRepository).findById(ACCOUNT_ID);
-        verify(accountRepository).save(existingAccount);
     }
 
     @Test

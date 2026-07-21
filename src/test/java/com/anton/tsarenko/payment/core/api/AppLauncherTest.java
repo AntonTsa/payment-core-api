@@ -10,6 +10,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.modulith.core.ApplicationModules;
 
 /**
  * Tests for {@link AppLauncher}.
@@ -47,5 +48,14 @@ class AppLauncherTest {
             // Then
             springApplication.verify(() -> SpringApplication.run(AppLauncher.class, args));
         }
+    }
+
+    @Test
+    void verifyModules() {
+        ApplicationModules.of(AppLauncher.class)
+                .forEach(System.out::println);
+
+        ApplicationModules.of(AppLauncher.class)
+                .verify();
     }
 }

@@ -2,7 +2,8 @@ package com.anton.tsarenko.payment.core.api.users.controller;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.anton.tsarenko.payment.core.api.users.dto.RestContractExceptionResponse;
+import com.anton.tsarenko.payment.core.api.shared.api.exceptions.GlobalExceptionHandler;
+import com.anton.tsarenko.payment.core.api.shared.api.response.RestContractExceptionResponse;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;

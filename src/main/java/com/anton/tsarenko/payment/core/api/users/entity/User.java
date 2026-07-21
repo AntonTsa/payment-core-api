@@ -21,7 +21,7 @@ import org.hibernate.annotations.CreationTimestamp;
 @Getter
 @Setter
 @Builder
-@Table(name = "users")
+@Table(name = "users", schema = "users")
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {

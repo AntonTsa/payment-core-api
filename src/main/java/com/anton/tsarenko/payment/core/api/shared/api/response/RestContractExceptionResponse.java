@@ -1,4 +1,4 @@
-package com.anton.tsarenko.payment.core.api.users.dto;
+package com.anton.tsarenko.payment.core.api.shared.api.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.io.Serializable;

@@ -5,7 +5,7 @@ import com.anton.tsarenko.payment.core.api.accounts.dto.AccountResponse;
 import com.anton.tsarenko.payment.core.api.accounts.entity.Account;
 import com.anton.tsarenko.payment.core.api.accounts.mapper.AccountMapper;
 import com.anton.tsarenko.payment.core.api.accounts.service.AccountService;
-import com.anton.tsarenko.payment.core.api.users.dto.RestContractExceptionResponse;
+import com.anton.tsarenko.payment.core.api.shared.api.response.RestContractExceptionResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

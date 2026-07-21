@@ -1,6 +1,5 @@
 package com.anton.tsarenko.payment.core.api.accounts.service.impl;
 
-
 import com.anton.tsarenko.payment.core.api.accounts.entity.Account;
 import com.anton.tsarenko.payment.core.api.accounts.repository.AccountRepository;
 import com.anton.tsarenko.payment.core.api.accounts.service.AccountsLookupService;

@@ -1,6 +1,6 @@
-package com.anton.tsarenko.payment.core.api.users.controller;
+package com.anton.tsarenko.payment.core.api.shared.api.exceptions;
 
-import com.anton.tsarenko.payment.core.api.users.dto.RestContractExceptionResponse;
+import com.anton.tsarenko.payment.core.api.shared.api.response.RestContractExceptionResponse;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.Map;

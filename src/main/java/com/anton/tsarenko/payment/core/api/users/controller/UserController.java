@@ -1,6 +1,6 @@
 package com.anton.tsarenko.payment.core.api.users.controller;
 
-import com.anton.tsarenko.payment.core.api.users.dto.RestContractExceptionResponse;
+import com.anton.tsarenko.payment.core.api.shared.api.response.RestContractExceptionResponse;
 import com.anton.tsarenko.payment.core.api.users.dto.UserRequest;
 import com.anton.tsarenko.payment.core.api.users.dto.UserResponse;
 import com.anton.tsarenko.payment.core.api.users.entity.User;

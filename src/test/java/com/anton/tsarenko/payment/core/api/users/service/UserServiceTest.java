@@ -169,40 +169,4 @@ class UserServiceTest {
         // Then
         verify(userRepository).deleteById(userId);
     }
-
-    @Test
-    @DisplayName("""
-            GIVEN existing user id
-            WHEN verifying if user exists
-            THEN returns true
-            """)
-    void shouldVerifyIfUserExistsAndReturnTrue() {
-        // Given
-        Long userId = 1L;
-        when(userRepository.existsById(userId)).thenReturn(true);
-        // When
-        boolean exists = userService.existedById(userId);
-
-        // Then
-        verify(userRepository).existsById(userId);
-        assertThat(exists).isTrue();
-    }
-
-    @Test
-    @DisplayName("""
-            GIVEN non-existing user id
-            WHEN verifying if user exists
-            THEN returns false
-            """)
-    void shouldVerifyIfUserExistsAndReturnFalse() {
-        // Given
-        Long userId = 1L;
-        when(userRepository.existsById(userId)).thenReturn(false);
-        // When
-        boolean exists = userService.existedById(userId);
-
-        // Then
-        verify(userRepository).existsById(userId);
-        assertThat(exists).isFalse();
-    }
 }
