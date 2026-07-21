@@ -56,6 +56,8 @@ class AccountMapperTest {
             """)
     void shouldApplyDefaultCurrencyAndStatus() {
         AccountRequest request = AccountRequest.builder()
+                .currency(null)
+                .status(null)
                 .userId(USER_ID)
                 .build();
 
@@ -90,4 +92,31 @@ class AccountMapperTest {
                 .hasFieldOrPropertyWithValue("status", AccountStatusDto.ACTIVE)
                 .hasFieldOrPropertyWithValue("createdAt", CREATED_AT);
     }
+
+    @Test
+    @DisplayName("""
+            GIVEN an account entity without currency and status
+            WHEN converting account to response DTO
+            THEN response contains all account fields correctly mapped
+            """)
+    void shouldConvertAccountEntityToAccountResponseWithDefaultValues() {
+        Account account = Account.builder()
+                .id(ACCOUNT_ID)
+                .userId(USER_ID)
+                .currency(null)
+                .status(null)
+                .createdAt(CREATED_AT)
+                .build();
+
+        AccountResponse response = accountMapper.toAccountResponse(account);
+
+        assertThat(response)
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("id", ACCOUNT_ID)
+                .hasFieldOrPropertyWithValue("userId", USER_ID)
+                .hasFieldOrPropertyWithValue("currency", AccountCurrencyDto.EUR)
+                .hasFieldOrPropertyWithValue("status", AccountStatusDto.ACTIVE)
+                .hasFieldOrPropertyWithValue("createdAt", CREATED_AT);
+    }
+
 }

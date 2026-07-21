@@ -1,7 +1,9 @@
 package com.anton.tsarenko.payment.core.api.users.service.impl;
 
+import com.anton.tsarenko.payment.core.api.accounts.service.AccountsLookupService;
 import com.anton.tsarenko.payment.core.api.users.entity.User;
 import com.anton.tsarenko.payment.core.api.users.repository.UserRepository;
+import com.anton.tsarenko.payment.core.api.users.service.UserLookupService;
 import com.anton.tsarenko.payment.core.api.users.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -11,9 +13,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl implements UserService, UserLookupService {
 
     private final UserRepository userRepository;
+    private final AccountsLookupService accountsLookupService;
 
     @Override
     public Long createUser(User user) {
@@ -36,6 +39,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
+        accountsLookupService.deleteAccountsByUserId(id);
         userRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean existedById(Long id) {
+        return userRepository.existsById(id);
     }
 }
